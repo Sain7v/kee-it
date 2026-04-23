@@ -84,7 +84,7 @@ class Task extends Model
 
     public function scopeByPriority(Builder $query): Builder
     {
-        return $query->orderByRaw("FIELD(priority, 'critica', 'alta', 'media', 'baja')");
+        return $query->orderByRaw("CASE priority WHEN 'critica' THEN 1 WHEN 'alta' THEN 2 WHEN 'media' THEN 3 WHEN 'baja' THEN 4 ELSE 5 END");
     }
 
     public function scopeDueToday(Builder $query): Builder
