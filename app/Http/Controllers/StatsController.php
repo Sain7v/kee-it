@@ -20,7 +20,7 @@ class StatsController extends Controller
         $user = $request->user();
 
         $weeklyCompleted = DB::table('tasks')
-            ->select(DB::raw('YEARWEEK(updated_at, 1) as yw, COUNT(*) as total'))
+            ->select(DB::raw("TO_CHAR(updated_at, 'IYYY-IW') as yw, COUNT(*) as total"))
             ->where('user_id', $user->id)
             ->where('status', 'completada')
             ->where('updated_at', '>=', now()->subWeeks(4))
@@ -35,7 +35,7 @@ class StatsController extends Controller
             ->toArray();
 
         $weeklyProcrastination = DB::table('tasks')
-            ->select(DB::raw('YEARWEEK(updated_at, 1) as yw, AVG(procrastination_score) as avg_score'))
+            ->select(DB::raw("TO_CHAR(updated_at, 'IYYY-IW') as yw, AVG(procrastination_score) as avg_score"))
             ->where('user_id', $user->id)
             ->where('updated_at', '>=', now()->subWeeks(4))
             ->groupBy('yw')
